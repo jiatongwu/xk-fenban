@@ -1,0 +1,12 @@
+.removed {
+	color: #FF5722;
+}
+
+.popup {
+	margin: 60px 20px;
+}
+
+.popup textarea {
+	width: 300px;
+	height: 150px;
+}

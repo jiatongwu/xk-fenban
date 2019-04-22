@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title></title>
+	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/layui/css/layui.css" />
+	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/css/common.css" />
+
+	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/layui/jquery2.2.4.js"></script>
+	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/layui/jquery.fileDownload.js"></script>
+</head>
+
+<body>
+
+	<input type="text" hidden id="contextPath" value="#(session.servletContext.contextPath)" />
+	<input type="text" hidden id="xmid" value="#(xmid)" />
+	<br />
+	<div id="addApp">
+		<form class="layui-form">
+
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">学校</label>
+					<div class="layui-input-inline">
+						<select name="areaId" id="city" lay-filter="city">
+							<option value=""></option>
+							#for(tmp: schools)
+							<option value="#(tmp)">#(tmp)</option>
+							#end
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">班级</label>
+					<div class="layui-input-inline">
+						<select name="studentType" id="county" lay-filter="aihao">
+							<option value=""></option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<div class="">
+		<div class="layui-block" style="margin-left:65px;">
+			<a href="javascript:;" id="exportConfirmedStudent" class="layui-btn layui-btn-normal">根据条件导出班级学生各科分数排名</a>
+		</div>
+	</div>
+	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/layui/layui.js"></script>
+	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/common.js"></script>
+	<script type="text/javascript"
+		src="#(session.servletContext.contextPath)/assets/js/xm/exportBjRankPage.js"></script>
+</body>
+
+</html>

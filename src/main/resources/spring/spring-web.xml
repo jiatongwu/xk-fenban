@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	
+<bean class="cn.xvkang.config.YmlPropertiesConfig"></bean>
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">		
+		<property name="locations">
+			<list>
+				<value>classpath:config/config.properties</value>
+			</list>
+		</property>
+		
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="fileEncoding">
+			<value>utf-8</value>
+		</property>
+	</bean>
+	<!-- 配置SpringMVC -->
+	<!-- 1.开启SpringMVC注解模式 -->
+	<!-- 简化配置： (1)自动注册DefaultAnootationHandlerMapping,AnotationMethodHandlerAdapter 
+		(2)提供一些列：数据绑定，数字和日期的format @NumberFormat, @DateTimeFormat, xml,json默认读写支持 -->
+	<mvc:annotation-driven />
+
+	<!-- 2.静态资源默认servlet配置 (1)加入对静态资源的处理：js,gif,png (2)允许使用"/"做整体映射 -->
+	<!-- <mvc:default-servlet-handler/> -->
+	<mvc:resources mapping="/assets/**" location="/assets/" />
+
+	<!-- 3.配置jsp 显示ViewResolver -->
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
+		/> <property name="prefix" value="/WEB-INF/jsp/" /> <property name="suffix" 
+		value=".jsp" /> </bean> -->
+
+
+
+	<bean id="viewResolver"
+		class="com.jfinal.template.ext.spring.JFinalViewResolver">
+		<!-- 是否热加载模板文件 -->
+		<property name="devMode" value="true" />
+		<!-- 配置shared function，多文件用逗号分隔 -->
+		<property name="sharedFunction"
+			value="/_view/common/_layout.html" />
+		<!-- 是否支持以 #(session.value) 的方式访问 session -->
+		<property name="sessionInView" value="true" />
+		<property name="prefix" value="/_view/" />
+		<property name="suffix" value=".html" />
+		<property name="order" value="1" />
+		<property name="contentType" value="text/html; charset=utf-8" />
+	</bean>
+
+	<!-- 4.扫描web相关的bean -->
+	<context:component-scan
+		base-package="cn.xvkang.controller,cn.xvkang.web.springmvcinterceptor" />
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 目前暂定为500M 后期可能会修改 -->
+		<property name="maxUploadSize" value="524288000"></property>
+	</bean>
+	<mvc:interceptors>
+		 <mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<ref bean="authenticationInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<ref bean="authorizationInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
+
+
+
+
+</beans>

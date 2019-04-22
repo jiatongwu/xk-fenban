@@ -1,0 +1,149 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@include file="/common/mytags.jsp" %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>角色菜单关联</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/><%--
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>common/frame/layui/css/layui.css" media="all">--%>
+    <%--<link rel="stylesheet" type="text/css" href="<%=basePath%>common/css/gobal.css" media="all">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>common/css/animate.css" media="all">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>backstage/css/common.css" media="all">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>backstage/css/createActive.css" media="all">--%>
+    <script type="text/javascript" src="<%=basePath%>common/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>css/dtree.css" media="all">
+    <script type="text/javascript" src="<%=basePath%>js/dtree.js"></script>
+
+    <style type="text/css">
+        .layui-form-checkbox{
+            margin: 15px;
+            width: 180px;
+        }
+        .layui-form-checkbox span{
+            width: 83%;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div class="larry-fluid larry-wrapper">
+    <div class="dtree" style="margin-left: 30px;">
+        <p><a href="javascript:  d.closeAll();">展开菜单</a> | <a href="javascript: d.openAll();">合并菜单</a></p>
+        <script type="text/javascript">
+
+            d = new dTree('d');
+            // dTree实例属性以此为：  节点ID，父类ID，chechbox的名称，chechbox的值，chechbox的显示名称，chechbox是否被选中--默认是不选，chechbox是否可用：默认是可用，节点链接：默认是虚链接
+            d.add(0,-1,'${requestScope.title}');
+
+            $.ajax({
+                url: '<%=basePath%>menuRole/getAuto',
+                type: 'post',
+                async: false,
+                data: {roleId:'${requestScope.roleId}',type:'${requestScope.type}'},
+                dataType: "json",
+                success: function (data) {
+                    if (data.state == 200) {
+                        var auto =  data.data.auto;
+                        for (var i = 0; i < auto.length; i++) {
+                            var id = auto[i].menuId;
+                            d.add(parseInt(auto[i].authorityId), parseInt(auto[i].parentId), 'menuRole', id, auto[i].name,(parseInt(auto[i].checked)== 1)?true:false);
+                        }
+                        document.write("<link rel='StyleSheet' href='<%=basePath%>css/dtree.css' type='text/css'/>"+d);
+                        d.closeAll();
+                    }
+                }, error: function () {
+                    top.layer.msg("系统数据处理异常！", {icon: 2});
+                    return false;
+                }
+            });
+
+        </script>
+       <!-- <a style="margin-left: 25px;" type="layui-btn" class="layui-btn layui-btn-danger"  id="all_checked">全选</a>-->
+    <div class="layui-form-item" style="position: fixed;bottom:15px;left: 50px;margin-top: -40px;">
+        <button class="treeSure" lay-submit="" lay-filter="ok" style="margin:20px 10px 0 10px;border:0;width: 80px;height: 30px;background: #009688;color: #FFFFFF;">确定</button>
+        <button type="layui-btn" id="cancle" class="treeCancle" style="margin:20px 10px 0 10px;border:0;width: 80px;height: 30px;background: #FF5722;color: #FFFFFF;">取消</button>
+    </div>
+    <input type="hidden" id="roleId" name="roleId" value="${requestScope.roleId}">
+    <input type="hidden" id="attribute" name="attribute" value="${requestScope.attribute}">
+    <input type="hidden" id="bossId" name="bossId" value="${requestScope.bossId}">
+    <input type="hidden" id="checkAutos" name="checkAutos" value="">
+
+
+</div>
+
+<script type="text/javascript" src="<%=basePath%>common/frame/layui/layui.js"></script>
+<script>
+
+    layui.config({
+        base: "<%=basePath%>common/larrylib/",
+        version: '201708031'
+    }).use(['jquery', 'form', 'upload'], function () {
+        var $ = layui.jquery, form = layui.form;
+        //监听提交
+        form.on("submit(ok)", function (data) {
+            var menuIds =[];
+            menuIds.push($("#bossId").val());//添加等级
+            var obj = document.all.menuRole;
+            for(i=0;i<obj.length;i++){
+                if(obj[i].checked){
+                   var value =  obj[i].value;
+                   menuIds.push(value);
+                }
+            }
+            if(menuIds.length<=1){
+                layer.msg("请分配角色权限！", {icon: 5});
+                return false;
+            }
+            data.field.menuIds=menuIds.toString();
+            data.field.roleId=$("#roleId").val();
+            data.field.attribute=$("#attribute").val();
+            var loginLoading = top.layer.msg('权限分配中，请稍候...', {icon: 16, time: false, shade: 0.8});
+            $.ajax({
+                url: '<%=basePath%>menuRole/doInner',
+                type: 'post',
+                async: false,
+                data: data.field,
+                dataType: "json",
+                success: function (data) {
+                    if (data.state == 200) {
+                        top.layer.msg(data.message, {icon: 6});
+                        closeIframe(true);
+                        return true;
+                    } else {
+                        top.layer.msg(data.message, {icon: 5});
+                        return false;
+                    }
+                    top.layer.close(loginLoading);
+                }, error: function () {
+                    top.layer.msg("系统数据处理异常！", {icon: 2});
+                    top.layer.close(loginLoading);
+                    return false;
+                }
+            });
+        });
+
+        //取消
+        $("#cancle").click(function () {
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        });
+
+        //全选
+        $("#all_checked").click(function () {
+            $('input[name="user_auto"]').each(function(index, item){//添加一级规格分类
+                $(item).attr("checked",true);
+            });
+            form.render();
+        });
+
+
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@include file="/common/mytags.jsp" %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>编辑角色信息</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>common/frame/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>common/css/gobal.css" media="all">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>common/css/animate.css" media="all">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>backstage/css/common.css" media="all">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>backstage/css/createActive.css" media="all">
+    
+</head>
+<body>
+
+
+<div class="larry-fluid larry-wrapper">
+
+    <div class="layui-row lay-col-space20">
+        <div class="layui-cos-xs12 layui-col-sm12 layui-col-md12 layui-col-lg8">
+            <section class="larry-body animated fadeInRightBig">
+                <div class="larry-body-content clearfix">
+                    <form class="layui-form" action="" method="post">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">角色名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="${requestScope.role.name}" lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+						 <input type="hidden" name="id" id="id"  value="${requestScope.role.id }">
+
+                        <div class="layui-form-item" style="text-align: center; margin-left: 50px;">
+                            <button class="layui-btn" lay-submit="" lay-filter="ok">确定</button>
+                            <button type="layui-btn" id="cancle" class="layui-btn layui-btn-primary">取消</button>
+
+                        </div>
+                    </form>
+
+
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="<%=basePath%>common/frame/layui/layui.js"></script>
+
+<script>
+    layui.config({
+        base: "<%=basePath%>common/larrylib/",
+        version: '201708031'
+    }).use(['jquery', 'form', 'upload'], function () {
+        var $ = layui.jquery, form = layui.form;
+
+        //监听提交
+        form.on("submit(ok)", function (data) {
+
+            var loginLoading = top.layer.msg('提交中，请稍候...', {icon: 16, time: false, shade: 0.8});
+            $.ajax({
+                url: '<%=basePath%>auth/role/doUpdate',
+                type: 'post',
+                async: false,
+                data: data.field,
+                dataType: "json",
+                success: function (data) {
+                    if (data.state == 200) {
+                        top.layer.msg(data.message, {icon: 6});
+                        closeIframe(true);
+                        return true;
+                    } else {
+                        top.layer.msg(data.message, {icon: 5});
+                        return false;
+                    }
+                     top.layer.close(loginLoading);
+                }, error: function () {
+                    top.layer.msg("系统数据处理异常！", {icon: 2});
+                    top.layer.close(loginLoading);
+                    return false;
+                }
+            });
+        });
+
+        //取消
+        $("#cancle").click(function () {
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        });
+
+
+    });
+
+</script>
+</body>
+</html>

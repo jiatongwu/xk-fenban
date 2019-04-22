@@ -1,0 +1,126 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="layui-card-body">
+		<div class="layui-card">
+			<form class="layui-form ">
+				<div class="layui-form-item">
+
+					#if((account.roleName =="市教育局")||(account.roleName =="超级管理员"))
+					<div class="layui-inline">
+						<label class="layui-form-label">区县</label>
+						<div class="layui-input-inline">
+							<select name="areaId" id="" lay-filter="aihao">
+								<option value=""></option>
+								#for(tmp: areas)
+								<option value="#(tmp.id)">#(tmp.name)</option>
+								#end
+							</select>
+						</div>
+					</div>
+					#else
+					#end
+
+					<div class="layui-inline">
+						<label class="layui-form-label">考生姓名</label>
+						<div class="layui-input-inline">
+							<input type="text" name="name" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">是否确认信息</label>
+						<div class="layui-input-inline">
+							<select name="confirmStatus" id="" >
+								<option value=""></option>								
+								<option value="1">已确认</option>
+								<option value="0">未确认</option>
+								
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">身份证号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="idcard" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+
+					#if(account.roleName =="毕业学校")
+					#else
+					<div class="layui-inline">
+						<label class="layui-form-label">毕业学校</label>
+						<div class="layui-input-inline">
+							<input type="text" name="biyeSchool" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					#end
+					<div class="layui-inline">
+						<label class="layui-form-label">报名号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="regCode" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">准考证号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="exam_number" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">考生类别</label>
+						<div class="layui-input-inline">
+							<select name="studentType" id="studentType" lay-filter="aihao">
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">是否有照片</label>
+						<div class="layui-input-inline">
+							<select name="haveImage" id="">
+								<option value=""></option>
+								<option value="0">没有</option>
+								<option value="1">有</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline">
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="query">查询</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="">
+			<div class="layui-block">
+				#if((account.roleName == "毕业学校")||(account.roleName == "超级管理员")||(account.roleName == "区县教育局")||(account.roleName == "市教育局") )
+				<a href="javascript:;" id="import" class="layui-btn layui-btn-normal">学校导入考生信息</a>
+				<a href="javascript:;" id="add" class="layui-btn layui-btn-normal">增加</a>
+				#end				
+			</div>
+			<table id="table" lay-filter="table"></table>
+			<script type="text/html" id="bar">
+				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看</a>
+				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">编辑</a>
+				#if((account.roleName == "毕业学校")||(account.roleName == "超级管理员") )
+				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a> 
+				#end
+			</script>
+		</div>
+	</div>
+</div>
+</div>
+#end #define css()
+<style>
+	.layui-form-label {
+		width:120px;
+	}
+</style>
+<link type="text/css" rel="stylesheet" href="/assets/css/student.css" />
+#end #define js()
+<script type="text/javascript" src="/assets/js/student/index.js"></script>
+#end

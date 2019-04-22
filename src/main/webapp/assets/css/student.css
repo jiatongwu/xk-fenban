@@ -1,0 +1,8 @@
+.popup {
+	margin: 80px 20px;
+}
+
+.popup textarea {
+	width: 300px;
+	height: 150px;
+}

@@ -1,0 +1,88 @@
+#@layout()
+#define main()
+
+<div class="layui-fluid larry-wrapper" style="width: 95%">
+    <blockquote class="layui-elem-quote larry-btn" style="height: 35px;">
+        <div class="layui-btn-group">
+            <button class="layui-btn" id="btn-expand">全部展开</button>
+            <button class="layui-btn" id="btn-fold">全部折叠</button>
+        </div>
+        &nbsp;&nbsp;
+        <input id="edt-search" type="text" placeholder="输入关键字" style="width: 120px;" />&nbsp;&nbsp;
+        <button class="layui-btn" id="btn-search">&nbsp;&nbsp;搜索&nbsp;&nbsp;</button>
+
+        <a class="layui-btn" data-type="getSelect" id="getSelect">查询</a>
+
+        <button class="layui-btn layui-btn-danger" style="display: none"
+            id="insert_menu">&nbsp;&nbsp;新增目录&nbsp;&nbsp;</button>
+
+    </blockquote>
+
+    <table id="auth-table" class="layui-table" lay-filter="auth-table"></table>
+</div>
+<!-- 操作列 -->
+<script type="text/html" id="oper-col">
+
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" style="">修改</a>
+    #[[  {{#  if(d.type != 2){ }}
+    <a class="layui-btn  layui-btn-warm layui-btn-xs " lay-event="add"  style="">新增</a>
+  {{#  } }} 
+    ]]#
+
+
+   
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    
+
+</script>
+
+
+
+
+
+
+
+#end
+#define css()
+<style type="text/css">
+    input {
+        height: 38px;
+        padding: 0 7px;
+        border: 1px solid #ccc;
+    }
+
+    input:focus {
+        border-color: #009E94;
+    }
+
+    /** 未展开 */
+    .treeTable-icon .layui-icon-layer:before {
+        content: "\e638";
+    }
+
+    /** 展开 */
+    .treeTable-icon.open .layui-icon-layer:before {
+        content: "\e638";
+    }
+
+    .treeTable-icon .layui-icon-file:before {
+        content: "\e621";
+    }
+
+    /** 未展开 */
+    .treeTable-icon .layui-icon-triangle-d:before {
+        content: "\e623";
+    }
+
+    /** 展开 */
+    .treeTable-icon.open .layui-icon-triangle-d:before {
+        content: "\e625";
+    }
+</style>
+
+#end
+
+
+#define js()
+<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/permission/list.js"></script>
+#end

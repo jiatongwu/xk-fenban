@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>贺阳学生管理系统</title>
+	<link type="text/css" rel="stylesheet" href="/assets/layui/css/layui.css" />
+	<link type="text/css" rel="stylesheet" href="/assets/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="/assets/css/student.css" />
+	<script type="text/javascript" src="/assets/layui/jquery2.2.4.js"></script>
+</head>
+
+<body>
+	<br />
+	<div id="addApp">
+		<form class="layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">姓名</label>
+				<div class="layui-input-inline">
+					<input type="text" name="name" value="#(studentInformation.name)" readonly autocomplete="off"
+						class="layui-input">
+				</div><label class="layui-form-label">身份证号</label>
+				<div class="layui-input-inline">
+					<input name="idcard" readonly autocomplete="off" value="#(studentInformation.idcard)"
+						class="layui-input" />
+				</div>
+			</div>
+
+
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">性别</label>
+				<div class="layui-input-inline">
+					<input type="radio" name="gender" value="1" title="男" #(studentInformation.gender==1 ? "checked"
+						: "" ) disabled="disabled" />
+					<input type="radio" name="gender" value="0" title="女" #(studentInformation.gender==0 ? "checked"
+						: "" ) disabled="disabled" />
+				</div><label class="layui-form-label">民族</label>
+				<div class="layui-input-inline">
+					<input name="idcard" readonly autocomplete="off"
+						value="#nationIdToName(studentInformation.nationId)" class="layui-input" />
+				</div>
+			</div>
+			<input type="text" id="studentRegIdInput" hidden value="#(studentInformation.id)" />
+
+
+
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">毕业学校</label>
+				<div class="layui-input-inline">
+					<input name="idcard" readonly autocomplete="off"
+						value="#schoolIdToName(studentInformation.schoolId)" class="layui-input" />
+				</div>
+				<label class="layui-form-label">考生类别</label>
+				<div class="layui-input-inline">
+					<input name="idcard" readonly autocomplete="off" value="#studentTypeToName(studentInformation.type)"
+						class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">班级</label>
+				<div class="layui-input-inline">
+					<input name="idcard" readonly autocomplete="off"
+						value="#clazzIdToNameDirective(studentInformation.clazzId)" class="layui-input" />
+				</div>
+			</div>
+
+			<div class="layui-upload">
+				<button type="button" style="margin-left:100px;" class="layui-btn" id="test1">上传图片</button>
+				<div class="layui-upload-list">
+					<img class="layui-upload-img" id="demo1" style="margin-left:100px;width:180px;height:120px;"
+						src="/student/displayImageByIdcard?idcard=#(studentInformation.idcard)"
+						style="width:180px;height:120px;" onerror="this.onerror=null;this.src='/student/noImage';" />
+
+					<p id="demoText"></p>
+				</div>
+			</div>
+
+
+
+
+		</form>
+	</div>
+
+	<script type="text/javascript" src="/assets/layui/layui.js"></script>
+	<script type="text/javascript" src="/assets/js/common.js"></script>
+	<script type="text/javascript" src="/assets/js/student/modifyStudentPicturePage.js"></script>
+</body>
+
+</html>

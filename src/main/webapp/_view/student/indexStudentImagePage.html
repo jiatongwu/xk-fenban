@@ -1,0 +1,196 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="layui-card-body">
+		<div class="layui-card">
+			<form class="layui-form ">
+				<div class="layui-form-item">
+
+					#if((account.roleName =="市教育局")||(account.roleName =="超级管理员"))
+					<div class="layui-inline">
+						<label class="layui-form-label">区县</label>
+						<div class="layui-input-inline">
+							<select name="areaId" id="" lay-filter="aihao">
+								<option value=""></option>
+								#for(tmp: areas)
+								<option value="#(tmp.id)">#(tmp.name)</option>
+								#end
+							</select>
+						</div>
+					</div>
+					#else
+					#end
+
+					<div class="layui-inline">
+						<label class="layui-form-label">考生姓名</label>
+						<div class="layui-input-inline">
+							<input type="text" name="name" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">是否确认信息</label>
+						<div class="layui-input-inline">
+							<select name="confirmStatus" id="">
+								<option value=""></option>
+								<option value="1">已确认</option>
+								<option value="0">未确认</option>
+
+							</select>
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">身份证号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="idcard" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+
+					#if(account.roleName =="毕业学校")
+					#else
+					<div class="layui-inline">
+						<label class="layui-form-label">毕业学校</label>
+						<div class="layui-input-inline">
+							<input type="text" name="biyeSchool" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					#end
+					<div class="layui-inline">
+						<label class="layui-form-label">报名号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="regCode" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">准考证号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="exam_number" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">考生类别</label>
+						<div class="layui-input-inline">
+							<select name="studentType" id="studentType" lay-filter="aihao">
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">是否有照片</label>
+						<div class="layui-input-inline">
+							<select name="haveImage" id="">
+								<option value=""></option>
+								<option value="0">没有</option>
+								<option value="1">有</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline">
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="query">查询</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="">
+			<div class="layui-block">
+				#if((account.roleName == "毕业学校")||(account.roleName == "超级管理员")||(account.roleName == "市教育局")||(account.roleName == "区县教育局") )
+				<a href="javascript:;" id="import" class="layui-btn layui-btn-normal">学校批量导入考生照片</a>
+				#end
+			</div>
+
+			<div id="studentImagesDiv">
+
+			</div>
+
+			<div>
+				<div id="demo7"></div>
+			</div>
+
+
+
+			<script type="text/html" id="bar">
+				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看</a>
+				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">编辑</a>
+				#if((account.roleName == "毕业学校")||(account.roleName == "超级管理员") )
+				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a> 
+				#end
+			</script>
+		</div>
+	</div>
+</div>
+</div>
+
+
+
+#[[
+<script id="mainDivTemplate" type="text/html">
+
+<div  class="layui-row">
+
+
+	{{#  layui.each(d.data, function(index, item){ }}
+			<div class="dlContainer">
+					
+					<dl class="myImageDl">
+							<dt class="myImageDt"><img class="myClass1" src="/student/displayImageByIdcard?idcard={{item.idcard}}" style="width:120px;height:180px;margin-left:30px"  onerror="this.onerror=null;this.src='/student/noImage';"/></dt>
+							<dd class="myImageDD">{{item.idcard}}</dd>
+							<dd class="myImageDD">{{item.name}} <button  class="layui-btn layui-btn-primary layui-btn-xs modifyPictureBtnClass">修改照片</button><input class="display:none;" type="text" hidden value="{{item.idcard}}"/></dd>
+						  </dl>
+					
+			</div>
+	{{#  }); }}
+
+
+
+</div>
+</script>
+]]#
+
+
+
+
+#end #define css()
+<style>
+
+
+			.layui-form-label {
+				width:120px;
+			}
+		
+	/* border:1px solid black ;*/
+	.myImageDl{
+		margin: 20px 0 0 20px;
+		border: 1px solid black;
+		float: left;
+		border-color: black
+	}
+	
+
+	.myImageDt {
+		width: 120px;
+		margin: 10px;
+		height: 180px;
+		background: #FFF;
+	}
+
+	.myImageDD {
+		width: 180px;
+		margin: 0 0 10px 10px;
+		height: 30px;
+		line-height: 30px;
+		background: #FFFFFF;
+		text-align: center;
+	}
+	.dlContainer{
+		width:19.666%;
+		display:inline-block;
+	}
+</style>
+#end #define js()
+<script type="text/javascript" src="/assets/js/student/indexStudentImagePage.js"></script>
+#end

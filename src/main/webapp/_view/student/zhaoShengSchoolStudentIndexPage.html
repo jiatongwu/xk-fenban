@@ -1,0 +1,115 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="layui-card-body">
+		<div class="layui-card">
+			<form class="layui-form ">
+				<div class="layui-form-item">
+
+
+
+
+					#if((account.roleName !="招生学校"))
+					<div class="layui-inline">
+						<label class="layui-form-label">区县</label>
+						<div class="layui-input-inline">
+							<select name="areaId" id="" lay-filter="aihao">
+								<option value=""></option>
+								#for(tmp: areas)
+								<option value="#(tmp.id)">#(tmp.name)</option>
+								#end
+							</select>
+						</div>
+					</div>
+					#else
+					#end
+
+
+
+					<div class="layui-inline">
+						<label class="layui-form-label">考生姓名</label>
+						<div class="layui-input-inline">
+							<input type="text" name="name" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">身份证号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="idcard" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+
+					#if(account.roleName =="招生学校")
+					#else
+					<div class="layui-inline">
+						<label class="layui-form-label">招生学校</label>
+						<div class="layui-input-inline">
+							<input type="text" name="zhaoShengSchool" placeholder="" autocomplete="off"
+								class="layui-input">
+						</div>
+					</div>
+					#end
+
+
+					#if(account.roleName =="毕业学校")
+					#else
+					<div class="layui-inline">
+						<label class="layui-form-label">毕业学校</label>
+						<div class="layui-input-inline">
+							<input type="text" name="biyeSchool" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					#end
+
+
+					<div class="layui-inline">
+						<label class="layui-form-label">准考证号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="exam_number" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">考生类别</label>
+						<div class="layui-input-inline">
+							<select name="studentType" id="studentType" lay-filter="aihao">
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">录取批次</label>
+						<div class="layui-input-inline">
+							<select name="luquPici" id="studentType" lay-filter="aihao">
+								<option value=""></option>
+								#for(tmp:allBatches)
+								<option value="#(tmp.batchCode)">#(tmp.name)</option>
+								#end
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline">
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="query">查询</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="">
+
+			<table id="table" lay-filter="table"></table>
+			<script type="text/html" id="bar">
+				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看</a>
+			</script>
+		</div>
+	</div>
+</div>
+</div>
+#end #define css()
+<link type="text/css" rel="stylesheet" href="/assets/css/student.css" />
+#end #define js()
+<script type="text/javascript" src="/assets/js/student/zhaoShengSchoolStudentIndexPage.js"></script>
+#end

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>贺阳学生管理系统</title>
+	<link type="text/css" rel="stylesheet" href="/assets/layui/css/layui.css" />
+	<link type="text/css" rel="stylesheet" href="/assets/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="/assets/css/student.css" />
+	<style>
+			.layui-form-label {
+				width:180px;
+			}
+		</style>
+	<script type="text/javascript" src="/assets/layui/jquery2.2.4.js"></script>
+</head>
+
+<body>
+	<br />
+	<div id="addApp">
+		<form class="layui-form">
+			<input name="id" id="inputId" hidden value="#(student.id)" />
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">姓名</label>
+				<div class="layui-input-inline">
+					<input type="text" name="name" value="#(student.name)" lay-verify="required" placeholder="请输入考生姓名"
+						autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-form-mid layui-word-aux">必填</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">身份证号</label>
+				<div class="layui-input-inline">
+					<input name="idcard" value="#(student.idcard)" placeholder="请输入身份证号" autocomplete="off"
+						class="layui-input" lay-verify="idcard" />
+				</div>
+				<div class="layui-form-mid layui-word-aux">必填</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">联系方式</label>
+				<div class="layui-input-inline">
+					<input name="contactInformation" placeholder="请输入联系方式" value="#(student.contactInformation)" autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">学籍号</label>
+				<div class="layui-input-inline">
+					<input name="schoolRollNum" placeholder="请输入学籍号" value="#(student.schoolRollNum)" autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+
+
+
+			<input type="text" id="nationHiddenId" value="#(student.nationId)" hidden />
+			<input type="text" name="schoolId" id="biyeSchoolHiddenId" value="#(student.schoolId)" hidden />
+			<input type="text" id="studentTypeHiddenId" value="#(studentReg.type ??)" hidden />
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">民族</label>
+				<div class="layui-input-inline">
+					<select name="nation" id="nationEdit" lay-filter="aihao" lay-verify="required">
+						<option value=""></option>
+						#for(tmp :nations)
+						<option value="#(tmp.id)" #(tmp.id == student.nationId ? "selected":"" )>#(tmp.name)</option>
+						#end
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">毕业学校</label>
+				<div class="layui-input-inline">
+					<input type="text"  value="#schoolIdToName(student.schoolId)" readonly 
+						autocomplete="off" class="layui-input"/>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">考生类别</label>
+				<div class="layui-input-inline">
+					<select name="studentType" id="studentTypeEdit">
+						<option value=""></option>
+						#for(tmp:studentTypes)
+						<option value="#(tmp.id)" #(tmp.id == studentReg.type.toString()?? ? "selected":"" )>#(tmp.name)</option>
+						#end
+					</select>
+				</div>
+			</div>
+			<input type="text" hidden id="sportTypesHiddenId" value="#(studentReg.sportTypes)" />
+			<div class="layui-form-item">
+				<label class="layui-form-label">考生户籍</label>
+				<div class="layui-input-inline">
+					<select name="studentCensusTypeId">
+						<option value=""></option>
+						#for(tmp: studentCensusTypes)
+						<option value="#(tmp.value)" #if(studentReg.censusType+"" ??==tmp.value)
+							selected="selected" #end>#(tmp.name)
+							#end
+					</select>
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">考生班级</label>
+				<div class="layui-input-inline">
+					<select name="classId" >
+						<option value=""></option>
+						#for(tmp: classes)
+						<option value="#(tmp.id)" #if(studentReg.clazzId==tmp.id) selected="selected" #end>#(tmp.name)</option>
+						#end
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">体育选考科目（选择2项）</label>
+				<div class="layui-input-inline" style="width:190px;" style="display:none;" id="tag_ids2">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-inline">
+					<button class="layui-btn layui-btn-normal" lay-submit lay-filter="update">提交</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="/assets/layui/layui.js"></script>
+	<script type="text/javascript" src="/assets/js/common.js"></script>
+	<script type="text/javascript" src="/assets/js/student/editPage.js"></script>
+
+<script type="text/javascript" src="/assets/layui/layui_extends/selectM.js"></script>
+<script type="text/javascript" src="/assets/layui/layui_extends/selectN.js"></script>
+</body>
+
+</html>

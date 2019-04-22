@@ -1,0 +1,47 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+
+	<id>release</id>
+
+	<!--设置打包格式 -->
+	<formats>
+		<format>dir</format>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+
+	<fileSets>
+		<!-- src/main/resources全部copy到config目录下 -->
+		<fileSet>
+			<directory>${basedir}/src/main/resources</directory>
+			<outputDirectory>config</outputDirectory>
+		</fileSet>
+		<!-- src/main/webapp全部copy到webapp目录下 -->
+		<fileSet>
+			<directory>${basedir}/src/main/webapp</directory>
+			<outputDirectory>webapp</outputDirectory>
+			<excludes>
+				<exclude>WEB-INF</exclude>
+				<exclude>WEB-INF/web.xml</exclude>
+			</excludes>
+		</fileSet>
+		<!-- 项目根目录下面的脚本文件copy到根目录下 -->
+		<fileSet>
+			<directory>${basedir}</directory>
+			<outputDirectory></outputDirectory>
+			<fileMode>755</fileMode>
+			<includes>
+				<include>*.sh</include>
+				<include>*.bat</include>
+			</includes>
+		</fileSet>		
+	</fileSets>
+
+	<!-- 依赖的jar包copy到lib目录下 -->
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+</assembly>

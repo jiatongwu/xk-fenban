@@ -1,0 +1,45 @@
+#@layout()
+#define main()
+<div class="layui-fluid larry-wrapper">
+    <blockquote class="layui-elem-quote larry-btn">
+    
+    <div class="layui-input-inline">
+        <label class="layui-form-label">手机号</label>
+        <div class="layui-input-block">
+        <input style="width: 130px;" type="text" name="userPhone" id="userPhone" class="layui-input" >
+        </div>
+    </div>
+     <div class="layui-input-inline">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+        <input style="width: 130px;" type="text" name="userName" id="userName" class="layui-input" >
+        </div>
+    </div>
+
+
+
+        <a class="layui-btn " data-type="getSelect" id="getSelect" > 查询  </a>
+
+       
+            <a class="layui-btn  layui-btn-normal" style="float: right;" id="add_manager" lay-event="add">添加管理员</a>
+      
+    </blockquote>
+    
+    <div class="flinkTable">
+        <table class="layui-table"   id="bannerPage" lay-filter="bannerPage"></table>
+    </div>
+
+
+</div>
+<script type="text/html" id="merchantBar">
+   
+        <a class="layui-btn layui-btn-xs  " lay-event="user_role">分配角色</a>&nbsp;
+ 
+</script>
+
+
+#end
+
+#define js()
+<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/user/user_list.js"></script>
+#end
