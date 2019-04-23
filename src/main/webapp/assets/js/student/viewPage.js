@@ -1,4 +1,4 @@
-
+var contextPath=$("#contextPath").val();
 function nation(form) {
 	$.getJSON("/student/nation",
 		function (data) {

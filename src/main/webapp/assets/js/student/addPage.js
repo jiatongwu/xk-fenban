@@ -1,4 +1,4 @@
-
+var contextPath=$("#contextPath").val();
 function nation(form) {
 	$.getJSON("/student/nation",
 		function (data) {
@@ -224,18 +224,18 @@ layui.extend({
 	var $ = layui.$;
 	var tagData = [];
 
-	$.ajax({
-		url: "/student/getAllSportTypes",
-		method: "get",
-		async: false,
-		success: function (data) {
-			tagData = data;
-		},
-		error : function(data) {
-			layer.alert('请求错误！');
-		}
-	});
-	var selectdArray = [];
+	// $.ajax({
+	// 	url: "/student/getAllSportTypes",
+	// 	method: "get",
+	// 	async: false,
+	// 	success: function (data) {
+	// 		tagData = data;
+	// 	},
+	// 	error : function(data) {
+	// 		layer.alert('请求错误！');
+	// 	}
+	// });
+	// var selectdArray = [];
 
 	var form = layui.form;
 	var table = layui.table;
@@ -249,7 +249,7 @@ layui.extend({
 
 	//学校 班级二级联运
 
-	city(form);
+	//city(form);
 	form.on('select(city)', function (data) {
 		var selectSchoolId = data.value;
 		if (selectSchoolId != null && selectSchoolId != "") {
@@ -266,30 +266,30 @@ layui.extend({
 	});
 
 	//多选标签-所有配置
-	var tagIns2 = selectM({
-		//元素容器【必填】
-		elem: '#tag_ids2'
+	// var tagIns2 = selectM({
+	// 	//元素容器【必填】
+	// 	elem: '#tag_ids2'
 
-		//候选数据【必填】
-		, data: tagData
+	// 	//候选数据【必填】
+	// 	, data: tagData
 
-		//默认值
-		, selected: selectdArray
+	// 	//默认值
+	// 	, selected: selectdArray
 
-		//最多选中个数，默认5
-		, max: 2
+	// 	//最多选中个数，默认5
+	// 	, max: 2
 
-		//input的name 不设置与选择器相同(去#.)
-		, name: 'sportTypeId'
+	// 	//input的name 不设置与选择器相同(去#.)
+	// 	, name: 'sportTypeId'
 
-		//值的分隔符
-		, delimiter: ','
+	// 	//值的分隔符
+	// 	, delimiter: ','
 
-		//候选项数据的键名
-		, field: { idName: 'value', titleName: 'name' }
+	// 	//候选项数据的键名
+	// 	, field: { idName: 'value', titleName: 'name' }
 
 
-	});
+	// });
 
 	// 自定义校验规则
 	//这个里面的title、number就写在Html 代码中lay-verify的属性值，即可
@@ -303,10 +303,10 @@ layui.extend({
 				var result;
 				var editId = $("#inputId").val();
 				$.ajax({
-					url: "/student/idcardUnique",
+					url:contextPath+ "/student/idcardUnique",
 					method: "get",
 					async: false,
-					data: { idcard: idcard, id: editId },
+					data: { idcard: idcard },
 					success: function (data) {
 						result = data;
 					},
@@ -320,14 +320,43 @@ layui.extend({
 			}
 
 		},
-		number: [/^[0-9]*$/, '必须输入数字啊']
+		number: [/^[0-9]*$/, '必须输入数字啊'],
+		phone:function (phone) {
+			var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
+
+			
+			
+			var flag = reg.test(phone); //true			
+			if (!flag) {
+				return "手机号格式不正确";
+			} else {
+				var result;
+				var editId = $("#inputId").val();
+				$.ajax({
+					url:contextPath+ "/student/phoneUnique",
+					method: "get",
+					async: false,
+					data: { phone: phone },
+					success: function (data) {
+						result = data;
+					},
+					error : function(data) {
+						layer.alert('请求错误！');
+					}
+				});
+				if (result == 'false') {
+					return '手机号已存在，不能新增';
+				}
+			}
+
+		}
 	});
 
 	/**初始化下拉列表 */
-	nation(form);
+//nation(form);
 	//studentType(form);
 	//biyeSchool(form);
-	nationEdit(form);
+//nationEdit(form);
 	//studentTypeEdit(form);
 	//biyeSchoolEdit(form);
 
@@ -469,9 +498,9 @@ layui.extend({
 
 	/**新增页面　表单提交执行函数 */
 	form.on('submit(save)', function (data) {
-		//console.log(data.field);
+		console.log(data.field);
 		$.ajax({
-			url: '/student/save',
+			url: contextPath+'/student/add',
 			type: 'post',
 			data: data.field,
 			dataType: 'json',

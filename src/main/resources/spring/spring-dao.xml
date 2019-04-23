@@ -8,10 +8,10 @@
 	http://www.springframework.org/schema/context/spring-context.xsd">
 	<!-- 配置整合mybatis过程 -->
 	<!-- 1.配置数据库相关参数properties的属性：${url} -->
-	
+
 	<context:property-placeholder
 		location="classpath:jdbc.properties,classpath:redis.properties" />
-		
+
 
 	<!-- 2.数据库连接池 -->
 	<bean id="dataSource"
@@ -31,10 +31,10 @@
 		<property name="checkoutTimeout" value="10000" />
 		<!-- 当获取连接失败重试次数 -->
 		<property name="acquireRetryAttempts" value="2" />
-		 <property name="testConnectionOnCheckout" value="false" />
-        <property name="testConnectionOnCheckin" value="true" />
-        <property name="idleConnectionTestPeriod" value="3600" />
-		
+		<property name="testConnectionOnCheckout" value="false" />
+		<property name="testConnectionOnCheckin" value="true" />
+		<property name="idleConnectionTestPeriod" value="3600" />
+
 	</bean>
 
 	<!-- 3.配置SqlSessionFactory对象 -->
@@ -64,4 +64,53 @@
 		<!-- 给出需要扫描Dao接口包 -->
 		<property name="basePackage" value="cn.xvkang.dao" />
 	</bean>
+
+
+
+
+
+
+	<!-- <bean id="h2Server" class="org.h2.tools.Server"
+		factory-method="createTcpServer" init-method="start"
+		destroy-method="stop" depends-on="h2WebServer">
+		<constructor-arg
+			value="-tcp,-tcpAllowOthers,-tcpPort,9092" />
+	</bean>
+	<bean id="h2WebServer" class="org.h2.tools.Server"
+		factory-method="createWebServer" init-method="start"
+		destroy-method="stop">
+		<constructor-arg
+			value="-web,-webAllowOthers,-webPort,8082" />
+	</bean> -->
+
+	<bean id="h2DataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close"> <!-- depends-on="h2Server"> -->
+		<property name="driverClass" value="org.h2.Driver" />
+		<property name="jdbcUrl"
+			value="jdbc:h2:mem:jiayuguan;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE" />
+	</bean>
+	<bean id="h2HibernateSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="h2DataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop> <!-- 指定自动生成数据表的策略 -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop> <!-- 执行操作时是否在控制台打印SQL -->
+				<prop key="hibernate.show_sql">true</prop> <!-- 是否对SQL进行格式化 -->
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property> <!-- 扫描此包下的所有Entity,进行ORM映射 -->
+		<property name="packagesToScan">
+			<list>
+				<value>cn.xvkang.h2.entity</value>
+			</list>
+		</property>
+	</bean>
+
+	<context:component-scan
+		base-package="cn.xvkang.h2.dao" />
+
+
+
 </beans>

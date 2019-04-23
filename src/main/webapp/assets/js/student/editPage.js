@@ -1,4 +1,4 @@
-
+var contextPath=$("#contextPath").val();
 function nation(form) {
 	$.getJSON("/student/nation",
 		function (data) {
@@ -199,23 +199,23 @@ layui.extend({
 	selectM: '/assets/layui/layui_extends/selectM',
 }).use(['jquery', 'form', 'table', 'layer', 'element'], function () {
 	var tagData = [];
-	var $ = layui.$;
-	$.ajax({
-		url: "/student/getAllSportTypes",
-		method: "get",
-		async: false,
-		success: function (data) {
-			tagData = data;
-		},
-		error : function(data) {
-			layer.alert('请求错误！');
-		}
-	});
-	var currentSportTypesHiddenIdValue = $("#sportTypesHiddenId").val();
-	var selectdArray = [];
-	if (currentSportTypesHiddenIdValue != null && currentSportTypesHiddenIdValue != "") {
-		selectdArray = currentSportTypesHiddenIdValue.split(",");
-	}
+	// var $ = layui.$;
+	// $.ajax({
+	// 	url: "/student/getAllSportTypes",
+	// 	method: "get",
+	// 	async: false,
+	// 	success: function (data) {
+	// 		tagData = data;
+	// 	},
+	// 	error : function(data) {
+	// 		layer.alert('请求错误！');
+	// 	}
+	// });
+	// var currentSportTypesHiddenIdValue = $("#sportTypesHiddenId").val();
+	// var selectdArray = [];
+	// if (currentSportTypesHiddenIdValue != null && currentSportTypesHiddenIdValue != "") {
+	// 	selectdArray = currentSportTypesHiddenIdValue.split(",");
+	// }
 
 	var form = layui.form;
 	var table = layui.table;
@@ -225,30 +225,30 @@ layui.extend({
 	var selectM = layui.selectM;
 
 	//多选标签-所有配置
-	var tagIns2 = selectM({
-		//元素容器【必填】
-		elem: '#tag_ids2'
+	// var tagIns2 = selectM({
+	// 	//元素容器【必填】
+	// 	elem: '#tag_ids2'
 
-		//候选数据【必填】
-		, data: tagData
+	// 	//候选数据【必填】
+	// 	, data: tagData
 
-		//默认值
-		, selected: selectdArray
+	// 	//默认值
+	// 	, selected: selectdArray
 
-		//最多选中个数，默认5
-		, max: 2
+	// 	//最多选中个数，默认5
+	// 	, max: 2
 
-		//input的name 不设置与选择器相同(去#.)
-		, name: 'sportTypeId'
+	// 	//input的name 不设置与选择器相同(去#.)
+	// 	, name: 'sportTypeId'
 
-		//值的分隔符
-		, delimiter: ','
+	// 	//值的分隔符
+	// 	, delimiter: ','
 
-		//候选项数据的键名
-		, field: { idName: 'value', titleName: 'name' }
+	// 	//候选项数据的键名
+	// 	, field: { idName: 'value', titleName: 'name' }
 
 
-	});
+	// });
 
 	// 自定义校验规则
 	//这个里面的title、number就写在Html 代码中lay-verify的属性值，即可
@@ -261,26 +261,63 @@ layui.extend({
 			} else {
 				var result;
 				var editId = $("#inputId").val();
-				$.ajax({
-					url: "/student/idcardUnique",
-					method: "get",
-					async: false,
-					data: { idcard: idcard, id: editId },
-					success: function (data) {
-						result = data;
-					},
-					error : function(data) {
-						layer.alert('请求错误！');
+				var oldIdcard=$("#idcardInputId").val();
+				if(idcard!=oldIdcard){
+					$.ajax({
+						url:contextPath+ "/student/idcardUnique",
+						method: "get",
+						async: false,
+						data: { idcard: idcard },
+						success: function (data) {
+							result = data;
+						},
+						error : function(data) {
+							layer.alert('请求错误！');
+						}
+					});
+					if (result == 'false') {
+						return '身份证已存在，不能新增';
 					}
-				});
-				if (result == 'false') {
-					return '身份证已存在，不能新增';
-				}
+				}				
 			}
 
 		},
-		number: [/^[0-9]*$/, '必须输入数字啊']
+		number: [/^[0-9]*$/, '必须输入数字啊'],
+		phone:function (phone) {
+			var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
+
+			
+			
+			var flag = reg.test(phone); //true			
+			if (!flag) {
+				return "手机号格式不正确";
+			} else {
+				var result;
+				var editId = $("#inputId").val();
+				var oldPhone=$("#phoneInputId").val();
+				if(oldPhone!=phone){
+					$.ajax({
+						url:contextPath+ "/student/phoneUnique",
+						method: "get",
+						async: false,
+						data: { phone: phone },
+						success: function (data) {
+							result = data;
+						},
+						error : function(data) {
+							layer.alert('请求错误！');
+						}
+					});
+					if (result == 'false') {
+						return '手机号已存在，不能新增';
+					}
+				}
+				
+			}
+
+		}
 	});
+
 
 	/**初始化下拉列表 */
 	//nation(form);
@@ -458,14 +495,14 @@ layui.extend({
 
 	/** 修改页面　编辑按钮执行函数 */
 	form.on('submit(update)', function (data) {
-		if ((tagIns2.values.length != 0) && (tagIns2.values.length != 2)) {
-			layer.alert('可以不选 或者 选择2个体育项目，体育选考由考生确认时选择', { icon: 1 });
-			return false;
-		}
+		// if ((tagIns2.values.length != 0) && (tagIns2.values.length != 2)) {
+		// 	layer.alert('可以不选 或者 选择2个体育项目，体育选考由考生确认时选择', { icon: 1 });
+		// 	return false;
+		// }
 
 		//console.log(data.field);
 		$.ajax({
-			url: '/student/update',
+			url:contextPath+ '/student/edit',
 			type: 'post',
 			data: data.field,
 			dataType: 'json',
@@ -489,6 +526,7 @@ layui.extend({
 			}
 		});
 		return false;
+	
 	});
-
+	
 });

@@ -167,6 +167,7 @@ layui.use(['jquery', 'form', 'table', 'layer', 'element'], function () {
 			});
 		}
 	});
+	
 
 	/**  点击搜索按钮时　查询　重新渲染表格*/
 	form.on('submit(query)', function (data) {

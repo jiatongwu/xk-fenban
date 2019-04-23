@@ -9,6 +9,7 @@ import com.github.pagehelper.PageHelper;
 
 import cn.xvkang.dao.UserMapper;
 import cn.xvkang.entity.User;
+import cn.xvkang.entity.UserExample;
 import cn.xvkang.service.UserService;
 import cn.xvkang.utils.page.PageImpl;
 import cn.xvkang.utils.page.PageRequest;
@@ -17,45 +18,44 @@ import cn.xvkang.utils.page.PageRequest;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
-	
-	
+
 	@Override
-	public 	PageImpl<User> selectAll(Integer pageNum,Integer pageSize) {
+	public PageImpl<User> selectAll(Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		
+
 		List<User> selectByExample = userMapper.selectByExample(null);
-		PageImpl<User> pageImpl = new PageImpl<User>(selectByExample,
-				new PageRequest(pageNum - 1, pageSize), ((com.github.pagehelper.Page<User>) selectByExample).getTotal());
+		PageImpl<User> pageImpl = new PageImpl<User>(selectByExample, new PageRequest(pageNum - 1, pageSize),
+				((com.github.pagehelper.Page<User>) selectByExample).getTotal());
 		return pageImpl;
 	}
-
-
-
-
-
-	
-
 
 	@Override
 	public void deleteById(Integer id) {
 		userMapper.deleteByPrimaryKey(id);
-		
-	}
 
+	}
 
 	@Override
 	public void add(User p) {
 		userMapper.insert(p);
-		
-	}
 
+	}
 
 	@Override
 	public User findById(Integer id) {
 		return userMapper.selectByPrimaryKey(id);
 	}
 
+	@Override
+	public User findByUsername(String username) {
+		UserExample example = new UserExample();
+		example.createCriteria().andUsernameEqualTo(username);
+		List<User> selectByExample = userMapper.selectByExample(example);
 
-
+		if (selectByExample != null && selectByExample.size() == 1) {
+			return selectByExample.get(0);
+		}
+		return null;
+	}
 
 }

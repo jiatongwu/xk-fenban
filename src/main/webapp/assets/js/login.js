@@ -1,3 +1,4 @@
+var contextPath=$("#contextPath").val();
 layui.use([ 'jquery', 'form', 'layer' ], function() {
 
 	var $ = layui.$;
@@ -17,7 +18,7 @@ layui.use([ 'jquery', 'form', 'layer' ], function() {
 	// 登录
 	form.on('submit(login)', function(data) {
 		$.ajax({
-			url : '/login',
+			url : contextPath+'/login',
 			type : 'post',
 			data : data.field,
 			dataType : 'json',
@@ -26,10 +27,11 @@ layui.use([ 'jquery', 'form', 'layer' ], function() {
 			},
 			success : function(data) {
 				layer.closeAll('loading');
-				if (data.state == 'ok') {
-					jumpToUrl(data.url);
-				} else if (data.state == 'fail') {
-					showFailMsg(data.msg);
+				if (data.code == 0) {
+					//jumpToUrl(data.url);
+					window.location.href=contextPath+"/index";
+				} else  {
+					showFailMsg(data.message);
 					$('.box .captcha').click();
 					$('.box input[name = "captcha"]').val('');
 				}

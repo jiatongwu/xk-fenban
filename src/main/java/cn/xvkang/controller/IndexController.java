@@ -1,5 +1,7 @@
 package cn.xvkang.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.xvkang.h2.dao.StudentDao;
+import cn.xvkang.h2.entity.Student;
 import cn.xvkang.service.PersonService;
 
 @Controller
-public class PersonController {
+public class IndexController {
 	
 	
+	@Autowired
+	private StudentDao studentDao;
 	
 	
 
@@ -32,14 +38,17 @@ public class PersonController {
 //		Person person = personService.selectById();
 //		request.setAttribute("person", person);
 //		request.setAttribute("persons", persons);
-		personService.selectAll();
+		//personService.selectAll();
 		return "index/index";
 	}
-	
 	@GetMapping("/ok")
 	@ResponseBody
-	public String ok(HttpServletRequest request) {
+	public List<Student> ok(HttpServletRequest request) {
 		System.out.println(request.getSession().getId());
-		return "ok";
+		Student s=new Student();
+		s.setName("test");
+		studentDao.save(s);
+		List<Student> selectAll = studentDao.selectAll();
+		return selectAll;
 	}
 }

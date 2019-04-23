@@ -24,7 +24,7 @@ public class Generator {
 		// File configFile = new
 		// File("/Volumes/mac-bak/main-workspace/eclipse-workspace/mybatis-generator/generatorConfig-oracle.xml");
 		File configFile = new File(
-				"/Users/wu/git-local-repository/ssm-spring-session-ok/src/main/java/cn/xvkang/utils/mybatis/generatorConfig-mysql.xml");
+				"/Users/wu/git-local-repository/fenban/src/main/java/cn/xvkang/utils/mybatis/generatorConfig-mysql.xml");
 
 		ConfigurationParser cp = new ConfigurationParser(warnings);
 		Configuration config = cp.parseConfiguration(configFile);

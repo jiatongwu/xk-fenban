@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import cn.xvkang.controller.LoginController;
 import cn.xvkang.dto.login.LoginUserInformation;
+import cn.xvkang.entity.User;
 import cn.xvkang.utils.SpringUtils;
 
 /**
@@ -44,15 +45,15 @@ public class SessionListener implements HttpSessionListener {
 		if (attribute != null) {
 
 			LoginUserInformation loginUserInformation = (LoginUserInformation) attribute;
-			String username = loginUserInformation.getUsername();
+			User user = loginUserInformation.getUser();
 
 			Object object = ((RedisTemplate<String, Set<String>>) SpringUtils.ac.getBean("redisTemplate")).opsForHash()
-					.get(LoginController.usernameSessionIdsRedisKey, username);
+					.get(LoginController.usernameSessionIdsRedisKey, user.getUsername());
 			if (object != null) {
 				Set<String> set = (Set<String>) object;
 				set.remove(id);
 				((RedisTemplate<String, Set<String>>) SpringUtils.ac.getBean("redisTemplate")).opsForHash()
-						.put(LoginController.usernameSessionIdsRedisKey, username, set);
+						.put(LoginController.usernameSessionIdsRedisKey, user.getUsername(), set);
 
 			}
 

@@ -3,31 +3,33 @@
 <!DOCTYPE html>
 <!--[if IE]><script type="text/javascript">top.location = "#(session.servletContext.contextPath)/browser/ver";</script><![endif]-->
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title></title>
-<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/layui/css/layui.css" />
-<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/css/common.css" />
-<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/layui/treetable-lay/treetable.css" />
-#@css?()
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title></title>
+	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/layui/css/layui.css" />
+	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/css/common.css" />
+	<link type="text/css" rel="stylesheet"
+		href="#(session.servletContext.contextPath)/assets/layui/treetable-lay/treetable.css" />
+	#@css?()
 </head>
 
 <body class="layui-layout-body">
-		<input type="text" hidden id="contextPath" value="#(session.servletContext.contextPath)"/>
+	<input type="text" hidden id="contextPath" value="#(session.servletContext.contextPath)" />
 
 	<div class="layui-layout layui-layout-admin">
 		<!-- 头部区域 -->
 		<div class="layui-header layui-bg-black">
-			<div class="layui-logo">logo</div>
+			<div class="layui-logo">学生分班</div>
 			<ul class="layui-nav layui-layout-right">
 				<li class="layui-nav-item">
-					<a href="javascript:;">欢迎</a>
+					<a href="javascript:;">#(session.loginUserInformation.displayName ??)</a>
 					<dl class="layui-nav-child">
-						<dd><a href="javascript:;" onclick="modifyPwd();">修改密码</a></dd>
-						<dd><a href="/logout">安全退出</a></dd>
+						<!-- <dd><a href="javascript:;" onclick="modifyPwd();">修改密码</a></dd> -->
+						<dd><a href="#(session.servletContext.contextPath)/logoutToLoginPage">安全退出</a></dd>
 					</dl>
 				</li>
 			</ul>
@@ -36,27 +38,27 @@
 		<div class="layui-side layui-bg-black">
 			<div class="layui-side-scroll">
 				<ul class="layui-nav layui-nav-tree">
-					
-					
-
-					
+					#if(session.loginUserInformation.displayName.equals("admin"))
 					<li class="layui-nav-item">
-						<a href="javascript:;">项目</a>
-						<dl class="layui-nav-child">	
-													
-							<dd><a class="#(route=='/xm/index'?'layui-this':'') second-level" href="#(session.servletContext.contextPath)/xm/index">查看</a></dd>
-							
+						<a href="javascript:;">学生管理</a>
+						<dl class="layui-nav-child">
+							<dd><a class="#(route=='/student/index'?'layui-this':'') second-level"
+									href="#(session.servletContext.contextPath)/student/index">学生列表</a></dd>
 						</dl>
-					 </li>
-					
-					
-				
+					</li>
+					#end
+					#if(session.loginUserInformation.student != null)
+					<li class="layui-nav-item">
+						<a class="#(route=='/xuanke/index'?'layui-this':'')"
+							href="#(session.servletContext.contextPath)/xuanke/index">学生选科</a>
+					</li>
+					#end
 				</ul>
 			</div>
 		</div>
 		<!-- 内容主体区域 -->
 		<div class="layui-body">
-		#@main()
+			#@main()
 		</div>
 	</div>
 
@@ -67,5 +69,6 @@
 	#@js?()
 </body>
 #@outBodyDiv?()
+
 </html>
 #end

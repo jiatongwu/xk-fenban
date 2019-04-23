@@ -1,31 +1,22 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="renderer" content="webkit">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<title></title>
-	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/layui/css/layui.css" />
-	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/css/common.css" />
-	<style>
-			.layui-form-label {
-				width:120px;
-			}
-		</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>登录超时</title>
+<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/css/login.css" />
 </head>
-
 <body>
-	<h1>您未登录，请重新登录</h1>
-
-
-	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/layui/jquery2.2.4.js"></script>
-	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/layui/layui.js"></script>
-	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/common.js"></script>
-	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/xm/importSportScorePage.js"></script>
-
-
+	<div class="over">
+		<h2>您的操作超时，请重新登录</h2>
+		<h3><a href="#" onclick="toLogin();">返回登录页面</a></h3>
+	</div>
+	<script>
+		function toLogin(){
+			window.top.location.href="#(session.servletContext.contextPath)/";
+		}
+	</script>
 </body>
-
 </html>

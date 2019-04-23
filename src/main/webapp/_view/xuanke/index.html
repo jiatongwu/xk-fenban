@@ -1,0 +1,48 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="layui-card-body">
+		#if(student.selectKemuzuheid!=null)
+		<h1>您的选科是：#(studentXuankan.fullname ??)</h1>
+		<br/><br/>
+		#end
+		<form class="layui-form ">
+			#for(oneCate : findAllByCategory)
+			<h2>#(oneCate.key)</h2><br />
+
+			#for(kemuzuhe : oneCate.value)
+			<div class="layui-form-item">
+				<label class="layui-form-label">#(kemuzuhe.fullname ??)</label>
+				<div class="layui-input-inline">
+					<input type="checkbox" name="select" value="#(kemuzuhe.code ??)" title="#(kemuzuhe.name ??)"
+						#if(student.selectKemuzuheid ??==kemuzuhe.id) checked #end　 
+						#if((student.selectKemuzuheid!=null)&&(student.selectKemuzuheAgain ?? == 0))
+						disabled="disabled" 
+						#end 
+						/>
+				</div>
+			</div>
+			#end
+			#end
+			#if((student.selectKemuzuheid ?? ==null)||(student.selectKemuzuheAgain ?? == 1))
+			<div class="layui-form-item">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-inline">
+					<button class="layui-btn layui-btn-normal" id="queryStudentButtonId" lay-submit
+						lay-filter="query">确认选择－提交</button>
+				</div>
+			</div>
+			#end
+
+		</form>
+	</div>
+</div>
+#end #define css()
+<style>
+	.layui-form-label {
+		width: 180px;
+	}
+</style>
+
+#end #define js()
+<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/xuanke/index.js"></script>
+#end

@@ -1,3 +1,6 @@
 notLoginCanAccessUrls:
    - /login
    - /assets/**
+   - /
+   - /captchaImage
+   - /logout

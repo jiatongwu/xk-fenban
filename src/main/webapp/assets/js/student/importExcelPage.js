@@ -1,4 +1,4 @@
-
+var contextPath=$("#contextPath").val();
 function downloadFile(urlToSend) {
 	// var req = new XMLHttpRequest();
 	// req.open("GET", urlToSend, true);
@@ -11,7 +11,6 @@ function downloadFile(urlToSend) {
 	// 	link.download=fileName;
 	// 	link.click();
 	// };
-
 	// req.send();
 	window.location = urlToSend;
 }
@@ -25,8 +24,45 @@ layui.use(['jquery', 'upload', 'form', 'table', 'layer', 'element'], function ()
 	var layer = layui.layer;
 	var element = layui.element;
 
-	$(document).on('click', '#downloadTemplate', function () {
-		downloadFile("/student/importTemplateDownload");
+	// $(document).on('click', '#downloadTemplate', function () {
+	// 	downloadFile(contextPath+"/student/importTemplateDownload");
+	// });
+	$('#downloadTemplate').on('click', function () {
+
+		// var areaId = $('[name="areaId"]').val();
+		
+		// var studentType=$('[name="studentType"]').val();
+		
+		
+		// if(areaId==''||studentType==''||areaId==undefined||studentType==undefined){
+		// 	console.log("null");
+		// 	layer.msg("请选择班级");
+		
+		// 	return;
+		// }
+		// var fieldData = {};
+		// fieldData.areaId = areaId; 
+		// fieldData.studentType=studentType;
+		//downloadFileByForm(contextPath +"/xm/exportBjRank", fieldData);
+		var url=contextPath +"/student/importTemplateDownload";　
+		$.fileDownload(url,{
+		 data:{},
+		prepareCallback:function(url){
+		  //alert("正在导出,请稍后...");
+		  layer.load(2); 
+		 },
+		 successCallback:function(url){
+		 // alert("导出完成！");
+		  layer.closeAll('loading');
+		  
+		 }, 
+		 failCallback:function (html, url) {
+		  //alert("导出失败，未知的异常。");
+		  layer.closeAll('loading');
+		  layer.msg("下载模板失败请联系管理员");
+		  } 
+		 }); 
+
 	});
 
 
@@ -36,19 +72,20 @@ layui.use(['jquery', 'upload', 'form', 'table', 'layer', 'element'], function ()
 	//选完文件后不自动上传
 	var uploadListen = upload.render({
 		elem: '#test8'
-		, url: '/student/importExcel'
+		, url: contextPath+'/student/importExcel'
 		, auto: false,
 		//,multiple: true
-		accept: 'file'
-		, data: {
-			schoolId: function () {
-				var schoolId = $('[name="schoolId"]').val();
-				return schoolId;
-			}, deleteOriginStudent: function () {
-				var deleteOriginStudent = $('#deleteOriginStudent').is(":checked");
-				return deleteOriginStudent;
-			}
-		}
+		accept: 'file',
+		field:'excel'
+		// , data: {
+		// 	schoolId: function () {
+		// 		var schoolId = $('[name="schoolId"]').val();
+		// 		return schoolId;
+		// 	}, deleteOriginStudent: function () {
+		// 		var deleteOriginStudent = $('#deleteOriginStudent').is(":checked");
+		// 		return deleteOriginStudent;
+		// 	}
+		// }
 		, bindAction: '#test9',
 		before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
 			//console.log(tmpFiles)

@@ -7,6 +7,9 @@ public interface UserService {
 	public 	PageImpl<User> selectAll(Integer pageNum,Integer pageSize);
 	public void add(User p);
 	public User findById(Integer id);
+	public User findByUsername(String username);
+	
+	
 	
 	public void  deleteById(Integer id);
 }
