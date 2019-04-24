@@ -238,16 +238,12 @@ public class StudentServiceImpl implements StudentService {
 						} else {
 							// 身份证号格式正确并且 数据库不存在此身份证号
 							// 从身份证中提取出出生年月 年龄 性别
-							Student findByIdcard = findByIdcard(idcardCelltString);
-							if (findByIdcard != null) {
-								isDataFormatOk = false;
-								errorMsgStringBuilder.append(" 身份证号已存在 ");
-							} else {
+						
 								Map<String, Object> checkIdcard = IdcardValidatorUtils.checkIdcard(idcardCelltString);
 								String gender = (String) checkIdcard.get("gender");
 								excelStudent.setGender(Integer.parseInt(gender));
 								tmpIdcardUnique.add(idcardCelltString);
-							}
+							
 						}
 
 					} else {
@@ -278,10 +274,15 @@ public class StudentServiceImpl implements StudentService {
 							// 从身份证中提取出出生年月 年龄 性别
 							Student findByPhone = findByPhone(yunxiaoyuanPhoneCellString);
 							if (findByPhone != null) {
-								isDataFormatOk = false;
-								errorMsgStringBuilder.append(" 手机号已存在 ");
+								String idcard = findByPhone.getIdcard();
+								if(!idcard.equals(idcardCelltString)) {
+									isDataFormatOk = false;
+									errorMsgStringBuilder.append(" 手机号已存在 ");
+								}else {
+									tmpPhoneUnique.add(yunxiaoyuanPhoneCellString);	
+								}							
 							} else {
-								tmpPhoneUnique.add(yunxiaoyuanPhoneCellString);
+								tmpPhoneUnique.add(yunxiaoyuanPhoneCellString);	
 							}
 						}
 

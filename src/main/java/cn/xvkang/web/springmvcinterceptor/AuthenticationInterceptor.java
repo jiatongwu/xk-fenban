@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -21,7 +19,7 @@ import cn.xvkang.controller.LoginController;
 
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
-	private Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
+	//private Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 
 	@Autowired
 	@Qualifier("ymlMap")
@@ -56,7 +54,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 //				return true;
 //			}
 		}
-		logger.debug("preHandler");
+		//logger.debug("preHandler");
 		HttpSession session = request.getSession();
 		Object attribute = session.getAttribute(LoginController.LOGIN_USER_INFORMATION_SESSION_KEY);
 		if (attribute != null) {
@@ -74,7 +72,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		logger.debug("postHandle");
+		//logger.debug("postHandle");
 
 	}
 
@@ -82,7 +80,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 
-		logger.debug("afterCompletion");
+		//logger.debug("afterCompletion");
 	}
 
 }
