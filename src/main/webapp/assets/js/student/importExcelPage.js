@@ -76,6 +76,12 @@ layui.use(['jquery', 'upload', 'form', 'table', 'layer', 'element'], function ()
 		, auto: false,
 		//,multiple: true
 		accept: 'file',
+		 data: {
+			 deleteOriginStudent: function () {
+				var deleteOriginStudent = $('#deleteOriginStudent').is(":checked");
+				return deleteOriginStudent;
+			}
+		},
 		field:'excel'
 		// , data: {
 		// 	schoolId: function () {

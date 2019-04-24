@@ -52,7 +52,7 @@
 				
 				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a> 
 				#[[
-				{{#  if(d.selectKemuzuheAgain == 0){ }}
+				{{#  if(d.selectKemuzuheAgain == 0 && d.selectKemuzuheid!=undefined){ }}
 				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="selectKemuzuheAgain">允许他重新选科</a>
 				{{# } }}
 				]]#

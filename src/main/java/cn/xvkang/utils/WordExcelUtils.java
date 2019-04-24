@@ -26,7 +26,7 @@ public class WordExcelUtils {
 		        try {
 					String dateString=DateFormatUtils.format(date, "yyyy年MM月dd日");
 					if(StringUtils.isNotBlank(dateString)) {
-						return dateString;
+						return dateString.trim();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +48,8 @@ public class WordExcelUtils {
 			result = numericCellValue + "";
 			break;
 		case STRING:
-			result = cell.getStringCellValue();
+			String stringCellValue = cell.getStringCellValue();
+			result = (stringCellValue==null?null:stringCellValue.trim());
 			break;
 		default:
 

@@ -133,6 +133,7 @@ public class StudentServiceImpl implements StudentService {
 
 		// List<String> messageList = new ArrayList<>();
 		Set<String> tmpIdcardUnique = new HashSet<>();
+		Set<String> tmpPhoneUnique = new HashSet<>();
 		long errorCount = 0l;
 		long successCount = 0l;
 		XSSFWorkbook xssfWorkbook;
@@ -148,62 +149,107 @@ public class StudentServiceImpl implements StudentService {
 					// 最后一行了，终止处理。
 					break;
 				}
-				XSSFCell cell0 = row.getCell(0);
-				String cell0String = WordExcelUtils.getCellStringValue(cell0);
-				if (StringUtils.isBlank(cell0String)) {
+				XSSFCell xujiCell = row.getCell(0);
+				String xujiCellString = WordExcelUtils.getCellStringValue(xujiCell);
+				if (StringUtils.isBlank(xujiCellString)) {
 					// 最后一行了，终止处理。
 					break;
 				}
+				Student excelStudent = new Student();
+
+				XSSFCell nameCell = row.getCell(1);
+				// XSSFCell genderCell = row.getCell(2);
+				XSSFCell idcardCell = row.getCell(3);
+//				XSSFCell nianjiNameCell = row.getCell(4);
+//				XSSFCell banjiNameCell = row.getCell(5);
+//				XSSFCell jibuNameCell = row.getCell(6);
+//				XSSFCell banjiCodeCell = row.getCell(7);
+//				XSSFCell currentAddressCell = row.getCell(8);
+//				XSSFCell contactAddressCell = row.getCell(9);
+//				XSSFCell contactPhoneCell = row.getCell(10);
+//				XSSFCell homeAddressCell = row.getCell(11);
+//				XSSFCell fatherPhoneCell = row.getCell(12);
+//				XSSFCell motherPhoneCell = row.getCell(13);
+//				XSSFCell yunxiaoyuanNameCell = row.getCell(14);
+//				XSSFCell yunxiaoyuanBanjiCell = row.getCell(15);
+				XSSFCell uniqueCell = row.getCell(4);
+				XSSFCell yunxiaoyuanPhoneCell = row.getCell(5);
+				XSSFCell gonfeiZifeiCell = row.getCell(6);
+				XSSFCell zizhushenCell = row.getCell(7);
+				XSSFCell jiandanlikahuCell = row.getCell(8);
+
+				String nameCellString = WordExcelUtils.getCellStringValue(nameCell);
+				// String genderCellString = WordExcelUtils.getCellStringValue(genderCell);
+				String idcardCelltString = WordExcelUtils.getCellStringValue(idcardCell);
+//				String nianjiNameCellString = WordExcelUtils.getCellStringValue(nianjiNameCell);
+//				String banjiNameCellString = WordExcelUtils.getCellStringValue(banjiNameCell);
+//				String jibuNameCellString = WordExcelUtils.getCellStringValue(jibuNameCell);
+//				String banjiCodeCellString = WordExcelUtils.getCellStringValue(banjiCodeCell);
+//				String currentAddressCellString = WordExcelUtils.getCellStringValue(currentAddressCell);
+//				String contactAddressCellString = WordExcelUtils.getCellStringValue(contactAddressCell);
+//				String contactPhoneCellString = WordExcelUtils.getCellStringValue(contactPhoneCell);
+//				String homeAddressCellString = WordExcelUtils.getCellStringValue(homeAddressCell);
+//				String fatherPhoneCellString = WordExcelUtils.getCellStringValue(fatherPhoneCell);
+//				String motherPhoneCellString = WordExcelUtils.getCellStringValue(motherPhoneCell);
+//				String yunxiaoyuanNameCellString = WordExcelUtils.getCellStringValue(yunxiaoyuanNameCell);
+//				String yunxiaoyuanBanjiCellString = WordExcelUtils.getCellStringValue(yunxiaoyuanBanjiCell);
+				String uniqueCellString = WordExcelUtils.getCellStringValue(uniqueCell);
+				String yunxiaoyuanPhoneCellString = WordExcelUtils.getCellStringValue(yunxiaoyuanPhoneCell);
+				String gonfeiZifeiCellString = WordExcelUtils.getCellStringValue(gonfeiZifeiCell);
+				String zizhushenCellString = WordExcelUtils.getCellStringValue(zizhushenCell);
+				String jiandanlikahuCellString = WordExcelUtils.getCellStringValue(jiandanlikahuCell);
 
 				boolean isDataFormatOk = true;
-				// 姓名 身份证号 民族 学籍号 联系电话
-				Map<String, String> dataMap = new HashMap<>();
-				if (StringUtils.isNotBlank(cell0String)) {
-					cell0String = cell0String.trim();
-				}
-				dataMap.put("name", cell0String);
 
 				StringBuilder errorMsgStringBuilder = new StringBuilder();
 				errorMsgStringBuilder.append("第" + (i + 1) + "行：");
 
-				XSSFCell cell1 = row.getCell(1);
-				String cell1String = WordExcelUtils.getCellStringValue(cell1);
-				if (StringUtils.isNotBlank(cell1String)) {
-					cell1String = cell1String.trim();
-				}
-				dataMap.put("idcard", cell1String);
+				excelStudent.setXuejihao(xujiCellString);
+				excelStudent.setName(nameCellString);
+//				excelStudent.setNijiName(nianjiNameCellString);
+//				excelStudent.setBanjiName(banjiNameCellString);
+//				excelStudent.setJibuName(jibuNameCellString);
+//				excelStudent.setBanjiCode(banjiCodeCellString);
+//				excelStudent.setCurrentAddress(currentAddressCellString);
+//				excelStudent.setContactAddress(contactAddressCellString);
+//				excelStudent.setContactTelphone(contactPhoneCellString);
+//				excelStudent.setHomeAddress(homeAddressCellString);
+//				excelStudent.setFatherPhone(fatherPhoneCellString);
+//				excelStudent.setMotherPhone(motherPhoneCellString);
+//				excelStudent.setYunxiaoyuanName(yunxiaoyuanNameCellString);
+//				excelStudent.setYunxiaoyuanBanjicode(yunxiaoyuanBanjiCellString);
+				excelStudent.setUniqueCode(uniqueCellString);
+				excelStudent.setYunxiaoyuanPhone(yunxiaoyuanPhoneCellString);
+				excelStudent.setGongfeiZifei(gonfeiZifeiCellString);
+				excelStudent.setZizhusheng(zizhushenCellString);
+				excelStudent.setJiandanglikahu(jiandanlikahuCellString);
+				excelStudent.setPhone(yunxiaoyuanPhoneCellString);
+				excelStudent.setIdcard(idcardCelltString);
 
 				// 判断身份证格式是否正确
-				if (IdcardValidatorUtils.isIdcardFormat(cell1String)) {
+				if (IdcardValidatorUtils.isIdcardFormat(idcardCelltString)) {
 					// 校验身份证号是否唯一
-					if (StringUtils.isNotBlank(cell1String)) {
-						boolean containsIdcard = tmpIdcardUnique.contains(cell1String);
+					if (StringUtils.isNotBlank(idcardCelltString)) {
+						boolean containsIdcard = tmpIdcardUnique.contains(idcardCelltString);
 						// Record findByIdcard = studentDao.findByIdcard(cell1String);
-						if ((containsIdcard) || (cell1String.length() < 18)) {
+						if ((containsIdcard) || (idcardCelltString.length() < 18)) {
 							isDataFormatOk = false;
 							errorMsgStringBuilder.append(" 身份证号已存在 ");
 						} else {
 							// 身份证号格式正确并且 数据库不存在此身份证号
 							// 从身份证中提取出出生年月 年龄 性别
-							Map<String, Object> checkIdcard = IdcardValidatorUtils.checkIdcard(cell1String);
-							String gender = (String) checkIdcard.get("gender");
-							dataMap.put("gender", gender);
-							// String birthday = (String) checkIdcard.get("birthday");
-							// dataMap.put("birthday", birthday);
-							// SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-//							try {
-//								Date birthdayDate = sdf.parse(birthday);
-//								int year = birthdayDate.getYear();
-//								Date now = new Date();
-//								int nowYear = now.getYear();
-//								String age = (nowYear - year + 1) + "";
-//								// dataMap.put("age", age);
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
-
+							Student findByIdcard = findByIdcard(idcardCelltString);
+							if (findByIdcard != null) {
+								isDataFormatOk = false;
+								errorMsgStringBuilder.append(" 身份证号已存在 ");
+							} else {
+								Map<String, Object> checkIdcard = IdcardValidatorUtils.checkIdcard(idcardCelltString);
+								String gender = (String) checkIdcard.get("gender");
+								excelStudent.setGender(Integer.parseInt(gender));
+								tmpIdcardUnique.add(idcardCelltString);
+							}
 						}
-						tmpIdcardUnique.add(cell1String);
+
 					} else {
 						isDataFormatOk = false;
 						errorMsgStringBuilder.append(" 身份证号不能为空 ");
@@ -219,20 +265,37 @@ public class StudentServiceImpl implements StudentService {
 					cell2String = cell2String.trim();
 				}
 
-				if (PhoneFormatCheckUtils.isChinaPhoneLegal(cell2String)) {
-					dataMap.put("phone", cell2String);
+				if (PhoneFormatCheckUtils.isChinaPhoneLegal(yunxiaoyuanPhoneCellString)) {
+					// 校验身份证号是否唯一
+					if (StringUtils.isNotBlank(yunxiaoyuanPhoneCellString)) {
+						boolean containsPhone = tmpPhoneUnique.contains(yunxiaoyuanPhoneCellString);
+						// Record findByIdcard = studentDao.findByIdcard(cell1String);
+						if (containsPhone) {
+							isDataFormatOk = false;
+							errorMsgStringBuilder.append(" 手机号已存在 ");
+						} else {
+							// 身份证号格式正确并且 数据库不存在此身份证号
+							// 从身份证中提取出出生年月 年龄 性别
+							Student findByPhone = findByPhone(yunxiaoyuanPhoneCellString);
+							if (findByPhone != null) {
+								isDataFormatOk = false;
+								errorMsgStringBuilder.append(" 手机号已存在 ");
+							} else {
+								tmpPhoneUnique.add(yunxiaoyuanPhoneCellString);
+							}
+						}
+
+					} else {
+						isDataFormatOk = false;
+						errorMsgStringBuilder.append(" 身份证号不能为空 ");
+					}
 				} else {
 					isDataFormatOk = false;
 					errorMsgStringBuilder.append(" 手机号格式不正确 ");
 				}
 
 				if (isDataFormatOk) {
-					Student s = new Student();
-					s.setIdcard(dataMap.get("idcard"));
-					s.setGender(Integer.parseInt(dataMap.get("gender")));
-					s.setPhone(dataMap.get("phone"));
-					s.setName(dataMap.get("name"));
-					datas.add(s);
+					datas.add(excelStudent);
 				} else {
 					// 有格式不正确的行 ，提示给用户
 					errorMessages.add(errorMsgStringBuilder.toString());
@@ -265,7 +328,12 @@ public class StudentServiceImpl implements StudentService {
 	private List<Map<String, String>> batchImportExcelStudent(List<Student> datas) {
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (Student s : datas) {
-			int saveOrUpdateOneStudent = saveOrUpdateOneStudent(s);
+			int saveOrUpdateOneStudent = 0;
+			try {
+				saveOrUpdateOneStudent = saveOrUpdateOneStudent(s);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			if (saveOrUpdateOneStudent == 0) {
 				Map<String, String> errorStudent = new HashMap<String, String>();
 				errorStudent.put("name", s.getName());
@@ -318,6 +386,10 @@ public class StudentServiceImpl implements StudentService {
 						return 1;
 					} else if (selectByExample.size() == 0) {
 						// 新增student
+						String idcard2 = s.getIdcard();
+						Map<String, Object> checkIdcard = IdcardValidatorUtils.checkIdcard(idcard2);
+						String gender = (String) checkIdcard.get("gender");
+						s.setGender(Integer.parseInt(gender));
 						studentMapper.insert(s);
 						// 新增user
 						User studentUser = new User();
@@ -364,6 +436,10 @@ public class StudentServiceImpl implements StudentService {
 						userMapper.updateByPrimaryKey(oldUser);
 					}
 				}
+				String idcard2 = s.getIdcard();
+				Map<String, Object> checkIdcard = IdcardValidatorUtils.checkIdcard(idcard2);
+				String gender = (String) checkIdcard.get("gender");
+				s.setGender(Integer.parseInt(gender));
 				studentMapper.updateByPrimaryKeySelective(s);
 				return 1;
 
@@ -375,6 +451,16 @@ public class StudentServiceImpl implements StudentService {
 	public Student findByIdcard(String idcard) {
 		StudentExample example = new StudentExample();
 		example.createCriteria().andIdcardEqualTo(idcard);
+		List<Student> selectByExample = studentMapper.selectByExample(example);
+		if (selectByExample.size() == 1) {
+			return selectByExample.get(0);
+		}
+		return null;
+	}
+
+	public Student findByPhone(String phone) {
+		StudentExample example = new StudentExample();
+		example.createCriteria().andPhoneEqualTo(phone);
 		List<Student> selectByExample = studentMapper.selectByExample(example);
 		if (selectByExample.size() == 1) {
 			return selectByExample.get(0);

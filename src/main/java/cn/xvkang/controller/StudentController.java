@@ -164,8 +164,8 @@ public class StudentController {
 
 	@PostMapping("/importExcel")
 	@ResponseBody
-	public Map<String, Object> importExcel(MultipartFile excel, String deleteOrigin) throws IOException {
-		Map<String, Object> importExcel = studentService.importExcel(deleteOrigin, excel.getInputStream());
+	public Map<String, Object> importExcel(MultipartFile excel, String deleteOriginStudent) throws IOException {
+		Map<String, Object> importExcel = studentService.importExcel(deleteOriginStudent, excel.getInputStream());
 		return importExcel;
 	}
 
@@ -174,7 +174,7 @@ public class StudentController {
 
 		Resource file = null;
 		try {
-			file = new FileSystemResource(templateFolderPath + "importStudent.xlsx");
+			file = new FileSystemResource(templateFolderPath + "importStudent2.xlsx");
 			if (file.exists()) {
 				return ResponseEntity.ok()
 						.header(HttpHeaders.CONTENT_DISPOSITION,

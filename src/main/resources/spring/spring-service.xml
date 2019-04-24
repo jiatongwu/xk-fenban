@@ -15,7 +15,7 @@
 	<!-- 扫描service包下所有使用注解的类型 -->
 	<context:component-scan
 		base-package="cn.xvkang.service" />
-
+<context:annotation-config />
 
 
 	<!-- 配置事务管理器 -->
@@ -34,7 +34,7 @@
 	<task:scheduler id="scheduler" pool-size="10" />
 	<task:executor id="executor" pool-size="7" />
 	<bean class="cn.xvkang.utils.SpringUtils"></bean>
-	<context:annotation-config />
+	
 	<!-- Redis -->
 	<bean id="jedisConnectionFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">

@@ -9,7 +9,7 @@ layui.use([ 'jquery', 'form', 'layer' ], function() {
 	form.verify({
 		username : [ /[\S]+/, '请输入用户名' ],
 		//password : [ /[\S]+/, '请输入密码' ],
-		captcha : [ /[\S]+/, '请输入验证码' ]
+		//captcha : [ /[\S]+/, '请输入验证码' ]
 	});
 
 	/** 登录 */
@@ -18,7 +18,7 @@ layui.use([ 'jquery', 'form', 'layer' ], function() {
 	// 登录
 	form.on('submit(login)', function(data) {
 		$.ajax({
-			url : contextPath+'/login',
+			url : contextPath+'/studentLogin',
 			type : 'post',
 			data : data.field,
 			dataType : 'json',

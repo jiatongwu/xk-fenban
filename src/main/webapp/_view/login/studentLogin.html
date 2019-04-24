@@ -10,7 +10,7 @@
 	<title></title>
 	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/layui/css/layui.css" />
 	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/css/common.css" />
-	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/css/login.css" />
+	<link type="text/css" rel="stylesheet" href="#(session.servletContext.contextPath)/assets/css/studentLogin.css" />
 
 </head>
 
@@ -20,31 +20,17 @@
 	<input type="text" hidden id="contextPath" value="#(session.servletContext.contextPath)" />
 	<div class="box">
 		<div class="logo">
-			<!-- <img src="/assets/img/logo.png" /> -->学生选科</div>
+			<!-- <img src="/assets/img/logo.png" /> -->学生登录</div>
 		<form class="layui-form layui-form-pane">
 			<div class="layui-form-item">
-				<label class="layui-form-label">用户名</label>
+				<label class="layui-form-label">手机号</label>
 				<div class="layui-input-block">
 					<input type="text" name="username" lay-verify="username" placeholder="请输入用户名" autocomplete="off"
 						class="layui-input">
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">密码</label>
-				<div class="layui-input-block">
-					<input type="password" name="password" lay-verify="password" placeholder="请输入密码" autocomplete="off"
-						class="layui-input">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">验证码</label>
-				<div class="layui-input-inline">
-					<input type="text" name="captcha" lay-verify="captcha" placeholder="请输入验证码" autocomplete="off"
-						class="layui-input">
-				</div>
-				<img title="点击刷新" class="captcha" src="#(session.servletContext.contextPath)/captchaImage"
-					onclick="this.src='#(session.servletContext.contextPath)/captchaImage?v=' + Math.random()">
-			</div>
+		
+			
 			<div class="layui-form-item">
 				<button class="layui-btn layui-btn-normal layui-btn-fluid" lay-submit lay-filter="login">登录</button>
 			</div>
@@ -53,7 +39,7 @@
 	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/layui/jquery2.2.4.js"></script>
 	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/layui/layui.js"></script>
 	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/common.js"></script>
-	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/login.js"></script>
+	<script type="text/javascript" src="#(session.servletContext.contextPath)/assets/js/studentLogin.js"></script>
 
 </body>
 <script>

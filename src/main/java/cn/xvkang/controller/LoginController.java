@@ -45,9 +45,81 @@ public class LoginController {
 	// public static Map<String, Set<String>> usernameSessionIdsMap = new
 	// HashMap<>();
 	// public static Map<String, HttpSession> sessionIdSessionMap = new HashMap<>();
-	@RequestMapping(value = { "/", "/loginPage" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/loginPage" }, method = RequestMethod.GET)
 	public String index(HttpServletRequest request) {
 		return "login/login";
+	}
+
+	@RequestMapping(value = { "/", "/studentLogin" }, method = RequestMethod.GET)
+	public String studentLogin(HttpServletRequest request) {
+		return "login/studentLogin";
+	}
+
+	@SuppressWarnings("unchecked")
+	@PostMapping("/studentLogin")
+	@ResponseBody
+	public Map<String, Object> studentLogin(String username, String password, String captcha,
+			HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		//String rightImageCode = (String) request.getSession().getAttribute(CaptchaController.SESSION_IMAGECODE_KEY);
+		Map<String, Object> result = new HashMap<String, Object>();
+		// List<String> message = new ArrayList<String>();
+
+		User findByUsername = userService.findByUsername(username);
+
+		if (findByUsername == null) {
+			result.put("code", Constants.ReturnCode.账号不存在.getCode());
+			result.put("message", Constants.ReturnCode.账号不存在.getMessage());
+		} else {
+			// 如果是学生登录不需要输入密码
+			Integer studentid = findByUsername.getStudentid();
+
+			// 校验密码
+			try {
+				String md5Crypt = DigestUtils.md5Hex(password + findByUsername.getSalt());
+				if ((!md5Crypt.equals(findByUsername.getPassword())) && (studentid == null)) {
+					result.put("code", Constants.ReturnCode.密码错误.getCode());
+					result.put("message", Constants.ReturnCode.密码错误.getMessage());
+				} else {
+					// 登录成功
+					result.put("code", Constants.ReturnCode.成功.getCode());
+					LoginUserInformation tmp = (LoginUserInformation) session
+							.getAttribute(LOGIN_USER_INFORMATION_SESSION_KEY);
+					if (tmp == null) {
+						LoginUserInformation loginUserInformation = new LoginUserInformation();
+						findByUsername.setPassword(null);
+						loginUserInformation.setUser(findByUsername);
+						loginUserInformation.setDisplayName(findByUsername.getUsername());
+						if (findByUsername.getStudentid() != null) {
+							// 获取student信息
+							Student findById = studentService.findById(findByUsername.getStudentid());
+							loginUserInformation.setStudent(findById);
+							loginUserInformation.setDisplayName(findById.getName());
+						}
+						String id = session.getId();
+						session.setAttribute(LOGIN_USER_INFORMATION_SESSION_KEY, loginUserInformation);
+						Object object = redisTemplate.opsForHash().get(LoginController.usernameSessionIdsRedisKey,
+								username);
+						if (object != null) {
+							Set<String> set = (Set<String>) object;
+							set.add(id);
+							redisTemplate.opsForHash().put(LoginController.usernameSessionIdsRedisKey, username, set);
+
+						} else {
+							Set<String> set = new HashSet<>();
+							set.add(id);
+							redisTemplate.opsForHash().put(LoginController.usernameSessionIdsRedisKey, username, set);
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				result.put("code", Constants.ReturnCode.密码错误.getCode());
+				result.put("message", Constants.ReturnCode.密码错误.getMessage());
+			}
+		}
+
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -57,8 +129,8 @@ public class LoginController {
 		HttpSession session = request.getSession();
 		String rightImageCode = (String) request.getSession().getAttribute(CaptchaController.SESSION_IMAGECODE_KEY);
 		Map<String, Object> result = new HashMap<String, Object>();
-		//List<String> message = new ArrayList<String>();
-	
+		// List<String> message = new ArrayList<String>();
+
 		User findByUsername = userService.findByUsername(username);
 		if (!rightImageCode.equalsIgnoreCase(captcha)) {
 			result.put("code", Constants.ReturnCode.验证码错误.getCode());
@@ -68,10 +140,13 @@ public class LoginController {
 				result.put("code", Constants.ReturnCode.账号不存在.getCode());
 				result.put("message", Constants.ReturnCode.账号不存在.getMessage());
 			} else {
+				// 如果是学生登录不需要输入密码
+				Integer studentid = findByUsername.getStudentid();
+
 				// 校验密码
 				try {
 					String md5Crypt = DigestUtils.md5Hex(password + findByUsername.getSalt());
-					if (!md5Crypt.equals(findByUsername.getPassword())) {
+					if ((!md5Crypt.equals(findByUsername.getPassword())) && (studentid == null)) {
 						result.put("code", Constants.ReturnCode.密码错误.getCode());
 						result.put("message", Constants.ReturnCode.密码错误.getMessage());
 					} else {
@@ -153,6 +228,7 @@ public class LoginController {
 
 		return "ok";
 	}
+
 	@SuppressWarnings("unchecked")
 	@GetMapping("/logoutToLoginPage")
 	public String logoutToLoginPage(HttpSession session) {
@@ -175,6 +251,7 @@ public class LoginController {
 
 		return "redirect:/";
 	}
+
 	@GetMapping("/me")
 	public String me(HttpSession session) {
 		LoginUserInformation tmp = (LoginUserInformation) session.getAttribute(LOGIN_USER_INFORMATION_SESSION_KEY);

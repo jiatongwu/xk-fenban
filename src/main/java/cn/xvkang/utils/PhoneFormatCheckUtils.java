@@ -25,7 +25,7 @@ public class PhoneFormatCheckUtils {
      * 147 
      */  
     public static boolean isChinaPhoneLegal(String str) throws PatternSyntaxException {  
-        String regExp = "^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$";  
+        String regExp = "^((16[0-9])|(19[0-9])|(13[0-9])|(15[^4])|(18[1,0,2,3,5-9])|(17[0-8])|(147))\\d{8}$";  
         Pattern p = Pattern.compile(regExp);  
         Matcher m = p.matcher(str);  
         return m.matches();  
@@ -126,7 +126,8 @@ public class PhoneFormatCheckUtils {
      * 数据封装 
      * @return
      */
-    public static Map getAddress() {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map getAddress() {
         Map map=new HashMap();
         map.put("name", getChineseName());
         map.put("sex", name_sex);
