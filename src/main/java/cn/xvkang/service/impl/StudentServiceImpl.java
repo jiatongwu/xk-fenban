@@ -28,9 +28,9 @@ import cn.xvkang.dao.StudentCustomMapper;
 import cn.xvkang.dao.StudentMapper;
 import cn.xvkang.dao.UserCustomMapper;
 import cn.xvkang.dao.UserMapper;
+import cn.xvkang.dto.student.StudentExtendDto;
 import cn.xvkang.entity.Student;
 import cn.xvkang.entity.StudentExample;
-import cn.xvkang.entity.StudentExample.Criteria;
 import cn.xvkang.entity.User;
 import cn.xvkang.entity.UserExample;
 import cn.xvkang.service.StudentService;
@@ -97,23 +97,25 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public Page<Student> table(String name, String idcard, String phone, int pageNum, int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
-		StudentExample example = new StudentExample();
-		Criteria createCriteria = example.createCriteria();
-		if (StringUtils.isNotBlank(name)) {
-			createCriteria.andNameLike("%" + name + "%");
-		}
-		if (StringUtils.isNotBlank(idcard)) {
-			createCriteria.andIdcardLike("%" + idcard + "%");
-		}
-		if (StringUtils.isNotBlank(phone)) {
-			createCriteria.andPhoneLike("%" + phone + "%");
-		}
+	public Page<StudentExtendDto> table(String name, String idcard, String phone, String kemuzuheId,String isSelectKemuzuhe, int pageNum,
+			int pageSize) {
 
-		List<Student> selectByExample = studentMapper.selectByExample(example);
-		PageImpl<Student> pageImpl = new PageImpl<Student>(selectByExample, new PageRequest(pageNum - 1, pageSize),
-				((com.github.pagehelper.Page<Student>) selectByExample).getTotal());
+		PageHelper.startPage(pageNum, pageSize);
+		if(StringUtils.isNotBlank(name)) {
+			name=("%"+name+"%");
+		}
+		if(StringUtils.isNotBlank(idcard)) {
+			name=("%"+idcard+"%");
+		}
+		if(StringUtils.isNotBlank(phone)) {
+			name=("%"+phone+"%");
+		}
+		
+		List<StudentExtendDto> selectByExample = studentCustomMapper.findAll(name, idcard, phone, kemuzuheId,isSelectKemuzuhe);
+
+		PageImpl<StudentExtendDto> pageImpl = new PageImpl<StudentExtendDto>(selectByExample,
+				new PageRequest(pageNum - 1, pageSize),
+				((com.github.pagehelper.Page<StudentExtendDto>) selectByExample).getTotal());
 		return pageImpl;
 	}
 
@@ -238,12 +240,12 @@ public class StudentServiceImpl implements StudentService {
 						} else {
 							// 身份证号格式正确并且 数据库不存在此身份证号
 							// 从身份证中提取出出生年月 年龄 性别
-						
-								Map<String, Object> checkIdcard = IdcardValidatorUtils.checkIdcard(idcardCelltString);
-								String gender = (String) checkIdcard.get("gender");
-								excelStudent.setGender(Integer.parseInt(gender));
-								tmpIdcardUnique.add(idcardCelltString);
-							
+
+							Map<String, Object> checkIdcard = IdcardValidatorUtils.checkIdcard(idcardCelltString);
+							String gender = (String) checkIdcard.get("gender");
+							excelStudent.setGender(Integer.parseInt(gender));
+							tmpIdcardUnique.add(idcardCelltString);
+
 						}
 
 					} else {
@@ -275,14 +277,14 @@ public class StudentServiceImpl implements StudentService {
 							Student findByPhone = findByPhone(yunxiaoyuanPhoneCellString);
 							if (findByPhone != null) {
 								String idcard = findByPhone.getIdcard();
-								if(!idcard.equals(idcardCelltString)) {
+								if (!idcard.equals(idcardCelltString)) {
 									isDataFormatOk = false;
 									errorMsgStringBuilder.append(" 手机号已存在 ");
-								}else {
-									tmpPhoneUnique.add(yunxiaoyuanPhoneCellString);	
-								}							
+								} else {
+									tmpPhoneUnique.add(yunxiaoyuanPhoneCellString);
+								}
 							} else {
-								tmpPhoneUnique.add(yunxiaoyuanPhoneCellString);	
+								tmpPhoneUnique.add(yunxiaoyuanPhoneCellString);
 							}
 						}
 

@@ -3,6 +3,7 @@ package cn.xvkang.service;
 import java.io.InputStream;
 import java.util.Map;
 
+import cn.xvkang.dto.student.StudentExtendDto;
 import cn.xvkang.entity.Student;
 import cn.xvkang.utils.page.Page;
 import cn.xvkang.utils.page.PageImpl;
@@ -19,7 +20,7 @@ public interface StudentService {
 
 	public int deleteById(Integer id);
 
-	public Page<Student> table(String name, String idcard, String phone, int parseInt, int parseInt2);
+	public Page<StudentExtendDto> table(String name, String idcard, String phone, String kemuzuheId, String isSelectKemuzuhe, int pageNum, int pageSize);
 
 	public Map<String, Object> importExcel(String deleteOrigin, InputStream inputStream);
 

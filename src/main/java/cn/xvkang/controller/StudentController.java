@@ -3,6 +3,7 @@ package cn.xvkang.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +24,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
+import cn.xvkang.dto.student.StudentExtendDto;
+import cn.xvkang.entity.Kemuzuhe;
 import cn.xvkang.entity.Student;
 import cn.xvkang.entity.User;
+import cn.xvkang.service.KemuzuheService;
 import cn.xvkang.service.StudentService;
 import cn.xvkang.service.UserService;
 import cn.xvkang.utils.Constants;
@@ -40,9 +44,13 @@ public class StudentController {
 	private StudentService studentService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private KemuzuheService kemuzuheService;
 
 	@GetMapping("/index")
 	public String index(HttpServletRequest request) {
+		Map<String, List<Kemuzuhe>> findAllByCategory = kemuzuheService.findAllByCategory();
+		request.setAttribute("findAllByCategory", findAllByCategory);
 		request.setAttribute("route", "/student/index");
 		return "student/index";
 	}
@@ -137,7 +145,7 @@ public class StudentController {
 	@ResponseBody
 	public Map<String, Object> edit(HttpServletRequest request, Student student) {
 		Map<String, Object> result = new HashMap<>();
-		
+
 		int i = studentService.edit(student);
 		if (i > 0) {
 			result.put("state", "ok");
@@ -152,11 +160,12 @@ public class StudentController {
 
 	@GetMapping("/table")
 	@ResponseBody
-	public Page<Student> table(String name, String idcard, String phone,
+	public Page<StudentExtendDto> table(String name, String idcard, String phone, String kemuzuheId,
+			String isSelectKemuzuhe,
 			@RequestParam(name = "page", required = false, defaultValue = "1") String pageNum,
 			@RequestParam(name = "limit", required = false, defaultValue = "10") String pageSize,
 			HttpServletRequest request) {
-		Page<Student> table = studentService.table(name, idcard, phone, Integer.parseInt(pageNum),
+		Page<StudentExtendDto> table = studentService.table(name, idcard, phone, kemuzuheId, isSelectKemuzuhe, Integer.parseInt(pageNum),
 				Integer.parseInt(pageSize));
 
 		return table;

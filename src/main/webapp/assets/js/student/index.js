@@ -64,7 +64,10 @@ layui.use(['jquery', 'form', 'table', 'layer', 'element'], function () {
 		},  {
 			field: 'phone',
 			title: '手机号'
-		}, , {
+		} ,{
+			field:'xuankezuheShortName',
+			title:'选科'
+		}, {
 			title: '操作',
 			toolbar: '#bar'
 		}]]

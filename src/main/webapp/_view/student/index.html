@@ -26,13 +26,40 @@
 						</div>
 					</div>
 
+					<div class="layui-inline">
+						<label class="layui-form-label">选科</label>
+						<div class="layui-input-inline">
+							<select name="kemuzuheId">
+								<option value=""></option>
+								#for(oneCate : findAllByCategory)
+								<optgroup label="#(oneCate.key)">
+									#for(kemuzuhe : oneCate.value)
+									<option value="#(kemuzuhe.id)">#(kemuzuhe.name)</option>
+									#end
+								</optgroup>
+								#end
+							</select>
+						</div>
+					</div>
+
+					<div class="layui-inline">
+							<label class="layui-form-label">是否选科</label>
+							<div class="layui-input-inline">
+								<select name="isSelectKemuzuhe">
+									<option value=""></option>
+									<option value="1">选了</option>
+									<option value="0">没选</option>
+								</select>
+							</div>
+						</div>
 
 
 
 					<div class="layui-inline">
 						<label class="layui-form-label"></label>
 						<div class="layui-input-inline">
-							<button class="layui-btn layui-btn-normal" id="queryStudentButtonId" lay-submit lay-filter="query">查询</button>
+							<button class="layui-btn layui-btn-normal" id="queryStudentButtonId" lay-submit
+								lay-filter="query">查询</button>
 						</div>
 					</div>
 				</div>
@@ -46,7 +73,7 @@
 			</div>
 			<table id="table" lay-filter="table"></table>
 			<script type="text/html" id="bar">
-				
+
 				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="view">查看</a>
 				<a href="javascript:;" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">编辑</a>
 				
